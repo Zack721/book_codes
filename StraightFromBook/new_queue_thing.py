@@ -7,7 +7,6 @@ class Queue:
     self.max_capacity_ = max_capacity
     
 
-
   def AddElement(self, element_to_add):
     if self.size_ < self.max_capacity_:
       if self.size_ == 0:
@@ -15,8 +14,12 @@ class Queue:
         
       self.end_ +=1
       self.size_ += 1
-      self.queue_[self.end_] = element_to_add
 
+    
+      if self.end_ > self.max_capacity_-1:
+        self.end_ = 0
+        #self.front_ = 0
+      self.queue_[self.end_] = element_to_add
       
     else:
       print("Already full bozo")
@@ -25,31 +28,42 @@ class Queue:
     if self.size_ == 0:
       print("The queue is empty")
 
-    else:   #josias, im not sure if the queue will shift so that the empty space left from the removing of the first element
-            #will be filled so for example if "A" is removed from queue ["A","B","C","D"] will it become ["","B","C","D"] or ["B","C","D"]
-      self.queue_.pop(self.front_)
-      self.queue_.insert(0, None) 
+    else: 
+      self.queue_[self.front_] = None
+      #self.queue_.insert(self.front_, None) 
       self.size_ -= 1
       self.front_ += 1
 
-      
-queue = Queue(8)
-assert queue.front_ == -1
-assert queue.end_ == -1
-assert queue.size_ == 0
+if __name__ == "__main__":
+  queue = Queue(8)
 
-queue.AddElement(12)
+  for i in range(8):
+    queue.AddElement(i)
 
-assert queue.front_ == 0
-assert queue.end_ == 0
-assert queue.size_ == 1
+  assert queue.queue_ == [0, 1, 2, 3, 4, 5, 6, 7]
 
-print(queue.queue_)
+  queue.RemoveElement()
+  assert queue.queue_ == [None, 1, 2, 3, 4, 5, 6, 7]
 
-queue.AddElement(14)
-queue.RemoveElement()
-print(queue.queue_)
-      
-assert queue.front_ == 1
-assert queue.end_ == 1
-assert queue.size_ == 1
+  queue.AddElement(11)
+  assert queue.size_ == 8
+  assert queue.queue_ == [11, 1, 2, 3, 4, 5, 6, 7]
+
+  queue.AddElement(12)
+  assert queue.size_ == 8
+  assert queue.queue_ == [11, 1, 2, 3, 4, 5, 6, 7]
+
+
+  queue.RemoveElement()
+  assert queue.size_ == 7
+  assert queue.queue_ ==  [11, None, 2, 3, 4, 5, 6, 7]
+
+  queue.RemoveElement()
+  queue.size_ == 6
+  assert queue.queue_ ==  [11, None, None, 3, 4, 5, 6, 7]
+
+  queue.AddElement(13)
+  assert queue.size_ == 7
+  assert queue.queue_ == [11, 13, None, 3, 4, 5, 6, 7]
+
+  
