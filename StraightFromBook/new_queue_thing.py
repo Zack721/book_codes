@@ -34,6 +34,11 @@ class Queue:
       self.size_ -= 1
       self.front_ += 1
 
+  def PrintAllInQueue(self):
+        for i in self.queue_:
+            print(i)
+            
+
 if __name__ == "__main__":
   queue = Queue(8)
 
@@ -66,4 +71,5 @@ if __name__ == "__main__":
   assert queue.size_ == 7
   assert queue.queue_ == [11, 13, None, 3, 4, 5, 6, 7]
 
+  queue.PrintAllInQueue()
   
