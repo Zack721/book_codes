@@ -1,0 +1,132 @@
+# NullPointer should be set to -1 if using array element with index 0
+NULLPOINTER = -1
+
+# Declare record type to store data and pointer
+class Node:
+    def __init__(self):
+        self.data = None
+        self.pointer = NULLPOINTER
+
+class LinkedList:
+    def __init__(self, capacity):
+        self.nodes_ = [Node() for i in range(capacity)]
+        self.start_index_ = NULLPOINTER  # set start pointer
+        self.free_index_ = 0  # set starting position of free self.nodes_
+        for index in range(capacity - 1):  # link all nodes to make free self.nodes_
+            self.nodes_[index].pointer = index + 1
+        self.nodes_[capacity - 1].pointer = NULLPOINTER  # last node of free self.nodes_
+        #return (self.nodes_, self.start_pointer_, self.free_index_)
+
+    def InsertNode(self, new_item):
+        if self.free_index_ != NULLPOINTER:
+            # there is space in the array
+            # take node from free self.nodes_ and store data item
+            target_index = self.free_index_
+            self.nodes_[target_index].data = new_item
+            self.free_index_ = self.nodes_[self.free_index_].pointer
+
+            # find insertion point
+            prev_node_index = NULLPOINTER
+            
+            current_index = self.start_index_  # start at beginning of self.nodes_
+            while current_index != NULLPOINTER and self.nodes_[current_index].data < new_item:
+                # while not end of self.nodes_
+                prev_node_index = current_index  # remember this node
+                # follow the pointer to the next node
+                current_index = self.nodes_[current_index].pointer
+
+            if prev_node_index == NULLPOINTER:
+                # insert new node at start of self.nodes_
+                self.nodes_[target_index].pointer = self.start_index_
+                self.start_index_ = target_index
+            else:
+                # insert new node between previous node and this node
+                self.nodes_[target_index].pointer = self.nodes_[prev_node_index].pointer
+                self.nodes_[prev_node_index].pointer = target_index
+        else:
+            print("no space for more data")
+
+
+    def FindNode(self, item_data):
+        # returns pointer to node
+        current_index = self.start_index_  # start at beginning of self.nodes_
+        while current_index != NULLPOINTER and self.nodes_[current_index].data != item_data:
+            # not end of self.nodes_, item not found
+            # follow the pointer to the next node
+            current_index = self.nodes_[current_index].pointer
+        return current_index
+
+
+    def DeleteNode(self, item_data):
+        current_index = self.start_pointer_  # start at beginning of self.nodes_
+        while current_index != NULLPOINTER and self.nodes_[current_index].Data != item_data:
+            # while not end of self.nodes_ and item not found
+            prev_node_index = current_index  # remember this node
+            # follow the pointer to the next node
+            current_index = self.nodes_[current_index].pointer
+
+        if current_index != NULLPOINTER:  # node exists in self.nodes_
+            if current_index == self.start_pointer_:  # first node to be deleted
+                self.start_pointer_ = self.nodes_[self.start_pointer_].pointer
+            else:
+                self.nodes_[prev_node_index].pointer = self.nodes_[current_index].pointer
+            self.nodes_[current_index].pointer = self.free_index_
+            self.free_index_ = current_index
+        else:
+            print("data does not exist in self.nodes_")
+
+if __name__ == "__main__":
+    array = [1, 2, 3, 4, 5]
+    container = LinkedList(8)
+    container.InsertNode("A")
+    container.InsertNode("B")
+    container.InsertNode("C")
+    container.InsertNode("D")
+    for node in container.nodes_:
+        print(node.data, node.pointer)
+    print("Success!")
+
+
+"""def OutputAllNodes(self.nodes_, self.start_pointer_):
+    CurrentNodePtr = self.start_pointer_  # start at beginning of self.nodes_
+    if self.start_pointer_ == NULLPOINTER:
+        print("No data in self.nodes_")
+    while CurrentNodePtr != NULLPOINTER:  # while not end of self.nodes_
+        print(CurrentNodePtr, " ", self.nodes_[CurrentNodePtr].Data)
+        # follow the pointer to the next node
+        CurrentNodePtr = self.nodes_[CurrentNodePtr].Pointer
+
+def GetOption():
+    print("1: insert a value")
+    print("2: delete a value")
+    print("3: find a value")
+    print("4: output self.nodes_")
+    print("5: end program")
+    response = input("Enter your choice: ")
+    return response
+
+# Main program
+self.nodes_, self.start_pointer_, self.free_index_ = Initialiseself.nodes_()
+Option = GetOption()
+
+while Option != "5":
+    if Option == "1":
+        Data = input("Enter the value: ")
+        self.nodes_, self.start_pointer_, self.free_index_ = InsertNode(self.nodes_, self.start_pointer_, self.free_index_, Data)
+        OutputAllNodes(self.nodes_, self.start_pointer_)
+    elif Option == "2":
+        Data = input("Enter the value: ")
+        self.nodes_, self.start_pointer_, self.free_index_ = DeleteNode(self.nodes_, self.start_pointer_, self.free_index_, Data)
+        OutputAllNodes(self.nodes_, self.start_pointer_)
+    elif Option == "3":
+        Data = input("Enter the value: ")
+        CurrentNodePtr = FindNode(self.nodes_, self.start_pointer_, Data)
+        if CurrentNodePtr == NULLPOINTER:
+            print("data not found")
+        print(self.start_pointer_, self.free_index_)
+        for i in range(8):
+            print(i, " ", self.nodes_[i].Data, " ", self.nodes_[i].Pointer)
+    elif Option == "4":
+        OutputAllNodes(self.nodes_, self.start_pointer_)
+    Option = GetOption()"""
+
