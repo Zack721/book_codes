@@ -1,64 +1,55 @@
-# NullPointer should be set to -1 if using array element with index 0
-EMPTYSTRING = ""
 NULLPOINTER = -1
-MAXSTACKSIZE = 8
-BASEOFSTACKPOINTER = 0
+class Stack:
+    def __init__(self, max_capacity):
+        self.max_ = max_capacity
+        self.base_of_stack_ptr = 0
+        self.top_of_stack_ptr = NULLPOINTER
+        self.stack_ = [None for i in range(self.max_)]
 
-def InitialiseStack():
-    TopOfStackPointer = NULLPOINTER
-    Stack = [EMPTYSTRING for i in range(MAXSTACKSIZE)]
-    return Stack, TopOfStackPointer
 
-def Push(Stack, TopOfStackPointer, NewItem):
-    if TopOfStackPointer < MAXSTACKSIZE - 1:
-        # there is space in the array
-        # increment top of stack pointer
-        TopOfStackPointer += 1
-        # add item to top of stack
-        Stack[TopOfStackPointer] = NewItem
-    else:
-        print("Stack full")
-    return Stack, TopOfStackPointer
+    def Push(self, NewItem):
+        if self.top_of_stack_ptr < self.max_ - 1:
+            self.top_of_stack_ptr += 1
+            self.stack_[self.top_of_stack_ptr] = NewItem
+        else:
+            print("Stack full")
+        
 
-def Pop(Stack, TopOfStackPointer):
-    Item = EMPTYSTRING
-    if TopOfStackPointer == NULLPOINTER:
-        print("No data on stack")
-    else:
-        Item = Stack[TopOfStackPointer]
-        TopOfStackPointer -= 1
-    return Stack, TopOfStackPointer, Item
+    """(original didnt like)def Pop(self, Item):
+        if self.top_of_stack_ptr == NULLPOINTER:
+            print("No data on stack")
+        else:
+            Item = self.stack_[self.top_of_stack_ptr]
+            self.top_of_stack_ptr -= 1   
+    """
 
-def OutputStack(Stack, TopOfStackPointer):
-    CurrentNodePtr = TopOfStackPointer  # start at top of stack
-    if TopOfStackPointer == NULLPOINTER:
-        print("No data on stack")
-    else:
-        while CurrentNodePtr >= BASEOFSTACKPOINTER:  # while not at base of stack
-            print(CurrentNodePtr, " ", Stack[CurrentNodePtr])
-            CurrentNodePtr -= 1
+    def Pop(self):
+        if self.top_of_stack_ptr != NULLPOINTER:
+            self.top_of_stack_ptr -=1
+        
+        else:
+            print("No data on stack")
 
-def GetOption():
-    print("1: push a value")
-    print("2: pop a value")
-    print("3: output stack")
-    print("4: end program")
-    response = input("Enter your choice: ")
-    return response
+    def OutputStack(self):
+        CurrentNodePtr = self.top_of_stack_ptr  # start at top of stack
+        if self.top_of_stack_ptr == NULLPOINTER:
+            print("No data on stack")
+        else:
+            while CurrentNodePtr >= self.base_of_stack_ptr:  # while not at base of stack
+                print(CurrentNodePtr, " ", self.stack_[CurrentNodePtr])
+                CurrentNodePtr -= 1
 
-# Main program
-Stack, TopOfStackPointer = InitialiseStack()
-Option = GetOption()
 
-while Option != "4":
-    if Option == "1":
-        Data = input("Enter the value: ")
-        Stack, TopOfStackPointer = Push(Stack, TopOfStackPointer, Data)
-        OutputStack(Stack, TopOfStackPointer)
-    elif Option == "2":
-        Stack, TopOfStackPointer, Item = Pop(Stack, TopOfStackPointer)
-        print("Data popped: ", Item)
-        OutputStack(Stack, TopOfStackPointer)
-    elif Option == "3":
-        OutputStack(Stack, TopOfStackPointer)
-    Option = GetOption()
+if __name__ == "__main__":
+    stack_ = Stack(8)
+    stack_.Push(12)
+    stack_.Push(11)
+    stack_.Push(13)
+    stack_.Push(14)
+    stack_.Push(111)
+    stack_.Push(9)
+    stack_.OutputStack()
+    stack_.Pop()
+    print("\n")
+    stack_.OutputStack()
+    
