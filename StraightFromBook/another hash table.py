@@ -1,0 +1,20 @@
+class student:
+    def __init__(self, full_name, age ,grade):
+        self.full_name_ = full_name
+        self.age_ = age
+        self.grade_ = grade
+    
+    def __hash__(self):
+        return hash(self.full_name_) % 10 + hash(self.age_) % 10 + hash(self.grade_) % 10
+
+    def __eq__(self, other):
+        return self.full_name_ == other.full_name_ and self.age_ == other.age_ and self.age_ == other.age_
+    
+    def __str__(self):
+        return f"this is the details of full name:{self.full_name_}, this is the details of age:{self.age_} and this is the details of grade{self.grade_}"
+    
+
+
+if __name__ == "__main__":
+    dictionary = {student("Isaac Ben Akan Taylor", 18, 12): 1, student("Josias", 23, 3): 2, student("Nathan Ben Akan Taylor", 23, 1): 3}
+    
