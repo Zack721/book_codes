@@ -24,11 +24,21 @@ class HashTable:
         current = self.table[index]
         if current == None:
             self.table[index] = new_node
+            self.size +=1
         else:
-            while current.next != None:
+            while current != None:
+                if current.key == key:
+                    current.value = value
+                    return
                 current = current.next
-            current.next = new_node
-        self.size += 1
+
+            new_node.next = self.table[index]
+            self.table[index] = new_node
+            self.size +=1
+            
+
+            
+        
 
     def DeleteNode(self, key):
         index = self.HashFunction(key)
@@ -49,6 +59,20 @@ class HashTable:
             previous = current
             current = current.next
 
+        print("Doesnt exist in hash table")
+
+    def PrintHash(self):
+        for i in range(self.max_capacity):
+            if self.table[i] == None:
+                print("None")
+                #print("\n")
+
+            else:
+                current = self.table[i]
+                while current != None:
+                    print(f"{current.key};{current.value} =>{current.next}")
+                    current = current.next
+                #print("\n")
 
 if __name__ == "__main__":
     hashtble = HashTable(8)
@@ -56,7 +80,9 @@ if __name__ == "__main__":
     hashtble.Insert("Josias", 23)
     hashtble.Insert("Nathan", 23)
     hashtble.Insert("Isaac", 2006)
+    hashtble.PrintHash()
     print(f"Before deleting one, the size is {hashtble.size}")
     hashtble.DeleteNode("Isaac")
     print(f"After deleting one, the size is {hashtble.size}")
+    hashtble.PrintHash()
 

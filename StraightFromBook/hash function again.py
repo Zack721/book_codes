@@ -10,6 +10,8 @@ class student:
     def __eq__(self, other):
         return self.full_name_ == other.full_name_ and self.age_ == other.age_ and self.age_ == other.age_
     
+    def __str__(self):
+        return f"this is the details of full name:{self.full_name_}, this is the details of age:{self.age_} and this is the details of grade{self.grade_}"
     
 
 
