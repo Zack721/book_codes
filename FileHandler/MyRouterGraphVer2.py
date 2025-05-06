@@ -22,16 +22,20 @@ def GetTrainsPassingBy(station, train_list):   #station here is an object of the
                 station.trains_passed_by.add(train)
                 break
 
-def DistanceCalc(train_list): #doing my own thing, calcs distance between the current and next station in route
+def LinkingNeighbours(train_list): #doing my own thing, calcs distance between the current and next station in route
     for train in train_list:
-        for i in range(len(train.route)-1):
-            first_x = train.route[i].coords[0] #is tuple, dont let the [] confuse u my G 
-            first_y = train.route[i].coords[1]
+        for refernce_station in train.route:
+            for station in train.route:
+                if refernce_station != station:
+                    distance = DistanceCalc(refernce_station.coords, station.coords)
+                
+                    refernce_station.neighbour_st[station.station_id] = distance
+            
+def DistanceCalc(coords1, coords2): #doing my own thing, calcs distance between the current and next station in route
+            first_x ,first_y= coords1 #is tuple, dont let the [] confuse u my G 
+            second_x, second_y = coords2
 
-            second_x = train.route[i+1].coords[0]
-            second_y = train.route[i+1].coords[1]
-
-            #lines 35 to 49
+            #lines 31 to 45
             # Convert degrees to radians
             first_x = math.radians(first_x)
             first_y = math.radians(first_y)
@@ -46,14 +50,8 @@ def DistanceCalc(train_list): #doing my own thing, calcs distance between the cu
             a = math.sin(dy / 2)**2 + math.cos(first_y) * math.cos(second_y) * math.sin(dx / 2)**2
             c = 2 * math.asin(math.sqrt(a))
             r = 6371  # Earth radius in kilometers
-            distance_km = c * r
+            return c * r
             
-            AssignRelation(train.route[i].neighbour_st, train.route[i].station_id, {train.route[i+1].station_id}, distance_km)
-
-def AssignRelation(neighbours_dict, station1, station2, distance): 
-            neighbours_dict[f"distance from {station1} to {station2}"] = distance
-            
-
 if __name__ == "__main__":
     stations_list = []
     train_list = [] #no diddy lol
@@ -80,7 +78,7 @@ if __name__ == "__main__":
     for station in stations_list:    #finds trains passing by for all stations
         GetTrainsPassingBy(station, train_list)
 
-    DistanceCalc(train_list)
+    LinkingNeighbours(train_list)
 
     for station in stations_list: #proof it works
         print(station.neighbour_st)
